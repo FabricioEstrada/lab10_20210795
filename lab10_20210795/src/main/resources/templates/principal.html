@@ -81,9 +81,9 @@
         }
 
         // Se agrega la tarea a la lista de pendientes si no hay errores (si pasa el return false)
-        // Se creara un elemento y no solo innerHTML x si se necesita manipular sus valores
+        // Se creara un elemento para colocar el texto de tipo lista
         const li = document.createElement('li');
-        li.textContent = `Tarea: ${nombreTarea} - Intervalo: ${intervaloTiempo} horas - ${cantidadIntervalos} intervalos`;
+        li.textContent = `Tarea: ${nombreTarea} - Tiempo restante: ${intervaloTiempo} horas - Intervalos restantes: ${cantidadIntervalos}`;
 
         // Agregando a donde se debe o sea tareas pendietnezzzz
         const TareasPendientez = document.getElementById('TareasPendientez');
@@ -92,9 +92,57 @@
         // Se limpiara el formulario para una nueva tarea cuando se vuelva a colocar para ver, se resetea los campos
         document.getElementById('FormularioTarea').reset();
         ocultarFormulario();
+        // Iniciando contador
+        iniciarContador(li, intervaloTiempo, cantidadIntervalos);
 
-        return false;  // Impide que el formulario se envíe (aunque no es necesario si se maneja con JavaScript)
+        return false;
     }
+
+
+
+    // Simulacion del contador y pasar a finalizado
+    function iniciarContador(li, intervaloTiempo, cantidadIntervalos) {
+        let intervalosRestantes = cantidadIntervalos;
+        let tiempoRestante = intervaloTiempo * 3600; // Convertimos a segundos
+        // Con el text content se obtendra el contenido y con split se dividira por - o sea que tendremos
+        // [Tarea: Olaaaaaa ; Intervalo: 1 horas ; 1 intervalos]
+        // nos quedaremos solo con el primero xq ese se mantiene, los demas cmabian
+        const nombreTarea = li.textContent.split(' - ')[0]; // Extraer solo el nombre de la tarea
+
+        const intervalId = setInterval(() => {
+            // Restar un minuto al finalizar el bloque
+            tiempoRestante=tiempoRestante-1;
+
+            // Calcular minutos y segundos restantes
+            let minutos = Math.floor(tiempoRestante / 60); // se divide entre 60 para obtener los minutos y solo parte entera (Redondeo hacia abajo)
+            let segundos = tiempoRestante % 60; // Se obtiene el residui de esa division, me calcula los segundos q falta
+
+            // Actualizando texto
+            li.textContent = `${nombreTarea} - Tiempo restante: ${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')} - Intervalos restantes: ${intervalosRestantes}`;
+
+            // Cuando el intervalo termine
+            if (tiempoRestante <= 0) {
+                clearInterval(intervalId);  // Detener el intervalo
+                intervalosRestantes=intervalosRestantes-1;  // Reducir el número de intervalos restantes
+
+                li.textContent = "Finalizado";
+
+                // Si todos los intervalos han terminado, se pasa a la lista de finalizados
+                if (intervalosRestantes <= 0) {
+                    const tareasFinalizadas = document.getElementById('TareasFinalizadas');
+                    tareasFinalizadas.appendChild(li); // Mover el <li> a la lista de tareas finalizadas
+                }
+
+                // Si hay más intervalos, se reinicia el contador
+                if (intervalosRestantes > 0) {
+                    iniciarContador(li, intervaloTiempo, intervalosRestantes);
+                }
+            }
+        }, 1000);  // Decrementamos el contador cada 1 segundo
+    }
+
+
+
 
 </script>
 </body>
