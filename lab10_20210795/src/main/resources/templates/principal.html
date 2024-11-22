@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronómetro de Actividades</title>
+    <style>
+        .rojo {
+            color: #8f2727;
+        }
+        .amarillo {
+            color: #b6b604;
+        }
+        .verde {
+            color: #208d20;
+        }
+    </style>
+</head>
+<body>
+<h1>Cronómetro de Actividades</h1>
+<button id="AgregarTareas" onclick="mostrarFormulario()">Agregar Tarea</button>
+
+<div id="ContenedorFormulario" style="display: none;">
+    <form id="FormularioTarea">
+        <label for="NombreTarea">Nombre de la tarea:</label>
+        <input type="text" id="NombreTarea" maxlength="80" required><br>
+
+        <label for="IntervaloTiempo">Tiempo por intervalo (en horas):</label>
+        <input type="number" id="IntervaloTiempo" min="1" required><br>
+
+        <label for="CantidadIntervalos">Cantidad de intervalos:</label>
+        <input type="number" id="CantidadIntervalos" min="1" required><br>
+
+        <button type="submit">Guardar</button>
+        <button type="button" onclick="ocultarFormulario()">Cancelar</button>
+    </form>
+</div>
+
+<h2>Tareas Pendientes</h2>
+<ul id="TareasPendientez"></ul>
+
+<h2>
+    <span id="ListaFinalizadas">▼</span> Tareas Finalizadas
+</h2>
+<ul id="TareasFinalizadas" style="display: none;"></ul>
+
+<script>
+    function mostrarFormulario() {
+        document.getElementById('ContenedorFormulario').style.display = 'block';
+    }
+    function ocultarFormulario() {
+        document.getElementById('ContenedorFormulario').style.display = 'none';
+    }
+</script>
+</body>
+</html>
